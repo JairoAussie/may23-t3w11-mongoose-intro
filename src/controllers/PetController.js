@@ -13,7 +13,7 @@ router.get("/all", async (request, response) => {
 
 // Finds one pet by its id
 router.get("/:id", async(request, response) => {
-    let result = null;
+    let result = await Pet.findById(request.params.id).catch(error => {return "Id not found"});
 
     response.json({
         pet: result
@@ -22,10 +22,11 @@ router.get("/:id", async(request, response) => {
 
 // Find one pet by its name
 router.get("/search/name/:name", async(request, response) => {
-    let result = null;
+    //console.log(request.params.name);
+    let result = await Pet.find({name: request.params.name});
 
     response.json({
-        pet: result
+        pets: result
     });
 })
 
@@ -41,7 +42,16 @@ router.get("/search/type/:type", async(request, response) => {
 //Create a new pet in the DB
 //POST localhost:3000/pets/
 router.post("/", async(request, response)=>{
-    let result = await Pet.create(request.body);
+
+    /*
+    try{
+        let result = await Pet.create(request.body);
+    } catch(error){
+        result = error,
+    }
+    */
+    // Error honadling vie Promise.catch()
+    let result = await Pet.create(request.body).catch(error => {return error});
 
     response.json({
         pet: result
