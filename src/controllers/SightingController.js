@@ -29,4 +29,30 @@ router.post("/", async(request, response) =>{
     })
 })
 
+//update a sighting by id
+router.patch("/:id", async(request, response) => {
+    request.body.time = new Date(Date.now());
+    let result = await Sighting.findByIdAndUpdate(
+        request.params.id,
+        request.body,
+        {
+            returnDocument: "after",
+            upsert: true
+        }
+    ).catch(error => error);
+
+    response.json({
+        updatedSighting: result
+    })
+})
+
+// delete a sighting by id
+router.delete("/:id", async(request, response) => {
+    let result = await Sighting.findByIdAndDelete(request.params.id).populate('user pets', '-password');
+
+    response.json({
+        deletedSighting: result
+    })
+})
+
 module.exports = router;
