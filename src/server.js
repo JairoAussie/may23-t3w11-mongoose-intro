@@ -12,10 +12,13 @@ app.get("/", (request, response) => {
         message: "Hello world"
     });
 });
-
+const {Pet} = require('./models/PetModel');
+const {User} = require('./models/UserModel');
 const PetRouter = require('./controllers/PetController');
-const { Pet } = require('./models/PetModel');
 app.use('/pets', PetRouter);
+
+const SightingRouter = require('./controllers/SightingController');
+app.use('/sightings', SightingRouter);
 
 module.exports = {
     app
